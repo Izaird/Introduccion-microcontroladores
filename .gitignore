@@ -1,2 +1,3 @@
-Practica_*\Debug\*
-Practica_*\Relase\*
+Practica_[0-9]*/Debug/*
+Practica_[0-9]*/Relase/*
+Practica_[0-9]*/*.cof

@@ -21,6 +21,9 @@ Data Stack size         : 128
 *******************************************************/
 
 #include <mega8535.h>
+#define boton PIND.0
+const char tabla7segmentos [10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7c,0x07,0x7f,0x6f};
+unsigned char var1;
 
 // Declare your global variables here
 
@@ -130,8 +133,12 @@ SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<
 // TWI disabled
 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 
-while (1)
-      {
+while (1){
+        if (boton==0)
+        var1++;
+        if (var1==10)
+        var1=0;
+        PORTB=tabla7segmentos [var1];
       // Place your code here
 
       }

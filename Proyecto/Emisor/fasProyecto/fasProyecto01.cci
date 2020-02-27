@@ -1,0 +1,9 @@
+VERSION:3 SOURCE_TIMESTAMP:505A4AB9
+NODE:I LEVEL:0 LINE:23 "C:\cvavreval\inc\mega8535.h"
+NODE:V LEVEL:0 LINE:24 "intervalo -> R5"
+NODE:I LEVEL:0 LINE:25 "C:\cvavreval\inc\delay.h"
+NODE:M LEVEL:0 LINE:26 "adelante"
+NODE:M LEVEL:0 LINE:27 "atras"
+NODE:M LEVEL:0 LINE:28 "izquierda"
+NODE:M LEVEL:0 LINE:29 "derecha"
+NODE:F LEVEL:0 LINE:33 "main(void)"

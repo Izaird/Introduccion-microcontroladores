@@ -1,3 +1,5 @@
 Practica_[0-9]*/Debug/*
 Practica_[0-9]*/Relase/*
 Practica_[0-9]*/*.cof
+Proyecto_01/*/Relase/*
+Proyecto_01/*/Debug/*

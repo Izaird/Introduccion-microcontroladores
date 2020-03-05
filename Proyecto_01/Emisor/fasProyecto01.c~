@@ -21,12 +21,19 @@ Data Stack size         : 128
 *******************************************************/
 
 #include <mega8535.h>
-unsigned char intervalo;
 #include <delay.h>
-#define adelante PINB.0
-#define atras PINB.1
-#define izquierda PINB.2
-#define derecha PINB.3
+#define up PINB.0
+#define down PINB.1
+#define left PINB.2
+#define right PINB.3
+bit up_p;
+bit up_a;
+bit down_p;
+bit down_a;
+bit left_p;
+bit left_a;
+bit right_p;
+bit right_a;
 
 // Declare your global variables here
 
@@ -137,23 +144,63 @@ SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<
 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 
 while (1)
-      {
-      // Place your code here
-        if(adelante==0)         //adelate
-            intervalo=50;        
-        else if(atras==0)       //atras
-            intervalo=100;
-        else if(izquierda==0)       //izquierda
-            intervalo=150;                   
-        else if(derecha==0)       //derecha
-            intervalo=200;
-        else 
-            intervalo=250;
-        
-        PORTA.0=1;
-        delay_ms(intervalo);
-        PORTA.0=0;
-        delay_ms(100);              
-      }   
-      
+      { 
+
+        //Boton up        
+            if (up==0)
+              up_a=0;
+            else
+              up_a=1;
+            if (up_a==0){ //hubo cambio de flanco de 1 a
+                PORTA.0 = 1; 
+                delay_ms(50);
+                PORTA.0 = 0;
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+            }
+            if (up_a==1) //hubo cambio de flanco de 0 a 1
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              
+        //Boton down        
+            if (down==0)
+              down_a=0;
+            else
+              down_a=1;
+            if (down_a==0){ //hubo cambio de flanco de 1 a
+                PORTA.0 = 1; 
+                delay_ms(100);
+                PORTA.0 = 0;
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+            }
+            if (down_a==1) //hubo cambio de flanco de 0 a 1
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes          
+                  
+        //Boton left        
+            if (left==0)
+              left_a=0;
+            else
+              left_a=1;
+            if (left_a==0){ //hubo cambio de flanco de 1 a
+                PORTA.0 = 1; 
+                delay_ms(150);
+                PORTA.0 = 0;
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+            }
+            if (left_a==1) //hubo cambio de flanco de 0 a 1
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes   
+                         
+        //Boton right        
+            if (right==0)
+              right_a=0;
+            else
+              right_a=1;
+            if (right_a==0){ //hubo cambio de flanco de 1 a
+                PORTA.0 = 1; 
+                delay_ms(200);
+                PORTA.0 = 0;
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+            }
+            if (right_a==1) //hubo cambio de flanco de 0 a 1
+              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes          
+   
+       }
 }

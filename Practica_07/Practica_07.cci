@@ -1,6 +1,6 @@
-VERSION:3 SOURCE_TIMESTAMP:5054450A
-NODE:I LEVEL:0 LINE:23 "C:\cvavreval\inc\mega8535.h"
-NODE:I LEVEL:0 LINE:24 "C:\cvavreval\inc\delay.h"
+VERSION:3 SOURCE_TIMESTAMP:50DB454A
+NODE:I LEVEL:0 LINE:23 "C:\cvavr\inc\mega8535.h"
+NODE:I LEVEL:0 LINE:24 "C:\cvavr\inc\delay.h"
 NODE:M LEVEL:0 LINE:25 "boton"
 NODE:V LEVEL:0 LINE:26 "botonp -> R2.0"
 NODE:V LEVEL:0 LINE:27 "botona -> R2.1"

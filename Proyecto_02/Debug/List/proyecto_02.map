@@ -11,21 +11,31 @@ Register Allocation
 Variable                                                                          Register  Size
 ------------------------------------------------------------------------------------------------
 up_a                                                                              R2.0      1bit
-down_a                                                                            R2.1      1bit
-left_a                                                                            R2.2      1bit
-right_a                                                                           R2.3      1bit
-run_a                                                                             R2.4      1bit
-pause_a                                                                           R2.5      1bit
-reset_a                                                                           R2.6      1bit
-input                                                                             R5           1
-var1                                                                              R6,R7        2
+up_p                                                                              R2.1      1bit
+down_a                                                                            R2.2      1bit
+down_p                                                                            R2.3      1bit
+left_a                                                                            R2.4      1bit
+left_p                                                                            R2.5      1bit
+right_a                                                                           R2.6      1bit
+right_p                                                                           R2.7      1bit
+run_a                                                                             R3.0      1bit
+run_p                                                                             R3.1      1bit
+pause_a                                                                           R3.2      1bit
+pause_p                                                                           R3.3      1bit
+reset_a                                                                           R3.4      1bit
+reset_p                                                                           R3.5      1bit
+stop                                                                              R3.6      1bit
+var1                                                                              R4,R5        2
+var2                                                                              R6,R7        2
 
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-main                                                                              0x0004D     50
-check_up                                                                          0x0007F     16
-check_down                                                                        0x0008F     16
-check_left                                                                        0x0009F     16
-check_right                                                                       0x000AF     16
-check_run                                                                         0x000BF     42
+main                                                                              0x00049     55
+check_up                                                                          0x00080     25
+check_down                                                                        0x00099     25
+check_left                                                                        0x000B2     25
+check_right                                                                       0x000CB     25
+check_run                                                                         0x000E4     54
+check_reset                                                                       0x0011A     23
+check_pause                                                                       0x00131     30

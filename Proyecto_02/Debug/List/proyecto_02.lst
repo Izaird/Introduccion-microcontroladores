@@ -1,9 +1,10 @@
 
-AVRASM ver. 2.1.30  B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm Sat Jun 27 15:33:43 2020
+AVRASM ver. 2.1.30  B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm Sat Jun 27 17:51:24 2020
 
-B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1086): warning: Register r5 already defined by the .DEF directive
-B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1087): warning: Register r6 already defined by the .DEF directive
-B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1088): warning: Register r7 already defined by the .DEF directive
+B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1086): warning: Register r4 already defined by the .DEF directive
+B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1087): warning: Register r5 already defined by the .DEF directive
+B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1088): warning: Register r6 already defined by the .DEF directive
+B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1089): warning: Register r7 already defined by the .DEF directive
                  
                  
                  ;CodeVisionAVR C Compiler V3.12 Advanced
@@ -1090,9 +1091,10 @@ B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1
                  	.ENDM
                  
                  ;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
-                 	.DEF _input=R5
-                 	.DEF _var1=R6
-                 	.DEF _var1_msb=R7
+                 	.DEF _var1=R4
+                 	.DEF _var1_msb=R5
+                 	.DEF _var2=R6
+                 	.DEF _var2_msb=R7
                  
                  	.CSEG
                  	.ORG 0x00
@@ -1101,7 +1103,7 @@ B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1
                  __START_OF_CODE:
                  
                  ;INTERRUPT VECTORS
-000000 c020      	RJMP __RESET
+000000 c01c      	RJMP __RESET
 000001 cffe      	RJMP 0x00
 000002 cffd      	RJMP 0x00
 000003 cffc      	RJMP 0x00
@@ -1126,96 +1128,88 @@ B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1
                  _movements:
 000015 050a
 000016 0802
-B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1120): warning: .cseg .db misalignment - padding zero byte
+B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1121): warning: .cseg .db misalignment - padding zero byte
 000017 0000      	.DB  0xA,0x5,0x2,0x8,0x0
                  
                  ;REGISTER BIT VARIABLES INITIALIZATION
                  __REG_BIT_VARS:
 000018 0000      	.DW  0x0000
                  
-                 ;GLOBAL REGISTER VARIABLES INITIALIZATION
-                 __REG_VARS:
-000019 0000      	.DB  0x0,0x0
-                 
                  
                  __GLOBAL_INI_TBL:
-00001a 0001      	.DW  0x01
-00001b 0002      	.DW  0x02
-00001c 0030      	.DW  __REG_BIT_VARS*2
-                 
-00001d 0002      	.DW  0x02
-00001e 0006      	.DW  0x06
-00001f 0032      	.DW  __REG_VARS*2
+000019 0002      	.DW  0x02
+00001a 0002      	.DW  0x02
+00001b 0030      	.DW  __REG_BIT_VARS*2
                  
                  _0xFFFFFFFF:
-000020 0000      	.DW  0
+00001c 0000      	.DW  0
                  
                  #define __GLOBAL_INI_TBL_PRESENT 1
                  
                  __RESET:
-000021 94f8      	CLI
-000022 27ee      	CLR  R30
-000023 bbec      	OUT  EECR,R30
+00001d 94f8      	CLI
+00001e 27ee      	CLR  R30
+00001f bbec      	OUT  EECR,R30
                  
                  ;INTERRUPT VECTORS ARE PLACED
                  ;AT THE START OF FLASH
-000024 e0f1      	LDI  R31,1
-000025 bffb      	OUT  GICR,R31
-000026 bfeb      	OUT  GICR,R30
-000027 bfe5      	OUT  MCUCR,R30
+000020 e0f1      	LDI  R31,1
+000021 bffb      	OUT  GICR,R31
+000022 bfeb      	OUT  GICR,R30
+000023 bfe5      	OUT  MCUCR,R30
                  
                  ;CLEAR R2-R14
-000028 e08d      	LDI  R24,(14-2)+1
-000029 e0a2      	LDI  R26,2
-00002a 27bb      	CLR  R27
+000024 e08d      	LDI  R24,(14-2)+1
+000025 e0a2      	LDI  R26,2
+000026 27bb      	CLR  R27
                  __CLEAR_REG:
-00002b 93ed      	ST   X+,R30
-00002c 958a      	DEC  R24
-00002d f7e9      	BRNE __CLEAR_REG
+000027 93ed      	ST   X+,R30
+000028 958a      	DEC  R24
+000029 f7e9      	BRNE __CLEAR_REG
                  
                  ;CLEAR SRAM
-00002e e080      	LDI  R24,LOW(__CLEAR_SRAM_SIZE)
-00002f e092      	LDI  R25,HIGH(__CLEAR_SRAM_SIZE)
-000030 e6a0      	LDI  R26,__SRAM_START
+00002a e080      	LDI  R24,LOW(__CLEAR_SRAM_SIZE)
+00002b e092      	LDI  R25,HIGH(__CLEAR_SRAM_SIZE)
+00002c e6a0      	LDI  R26,__SRAM_START
                  __CLEAR_SRAM:
-000031 93ed      	ST   X+,R30
-000032 9701      	SBIW R24,1
-000033 f7e9      	BRNE __CLEAR_SRAM
+00002d 93ed      	ST   X+,R30
+00002e 9701      	SBIW R24,1
+00002f f7e9      	BRNE __CLEAR_SRAM
                  
                  ;GLOBAL VARIABLES INITIALIZATION
-000034 e3e4      	LDI  R30,LOW(__GLOBAL_INI_TBL*2)
-000035 e0f0      	LDI  R31,HIGH(__GLOBAL_INI_TBL*2)
+000030 e3e2      	LDI  R30,LOW(__GLOBAL_INI_TBL*2)
+000031 e0f0      	LDI  R31,HIGH(__GLOBAL_INI_TBL*2)
                  __GLOBAL_INI_NEXT:
-000036 9185      	LPM  R24,Z+
-000037 9195      	LPM  R25,Z+
-000038 9700      	SBIW R24,0
-000039 f061      	BREQ __GLOBAL_INI_END
-00003a 91a5      	LPM  R26,Z+
-00003b 91b5      	LPM  R27,Z+
-00003c 9005      	LPM  R0,Z+
-00003d 9015      	LPM  R1,Z+
-00003e 01bf      	MOVW R22,R30
-00003f 01f0      	MOVW R30,R0
+000032 9185      	LPM  R24,Z+
+000033 9195      	LPM  R25,Z+
+000034 9700      	SBIW R24,0
+000035 f061      	BREQ __GLOBAL_INI_END
+000036 91a5      	LPM  R26,Z+
+000037 91b5      	LPM  R27,Z+
+000038 9005      	LPM  R0,Z+
+000039 9015      	LPM  R1,Z+
+00003a 01bf      	MOVW R22,R30
+00003b 01f0      	MOVW R30,R0
                  __GLOBAL_INI_LOOP:
-000040 9005      	LPM  R0,Z+
-000041 920d      	ST   X+,R0
-000042 9701      	SBIW R24,1
-000043 f7e1      	BRNE __GLOBAL_INI_LOOP
-000044 01fb      	MOVW R30,R22
-000045 cff0      	RJMP __GLOBAL_INI_NEXT
+00003c 9005      	LPM  R0,Z+
+00003d 920d      	ST   X+,R0
+00003e 9701      	SBIW R24,1
+00003f f7e1      	BRNE __GLOBAL_INI_LOOP
+000040 01fb      	MOVW R30,R22
+000041 cff0      	RJMP __GLOBAL_INI_NEXT
                  __GLOBAL_INI_END:
                  
                  ;HARDWARE STACK POINTER INITIALIZATION
-000046 e5ef      	LDI  R30,LOW(__SRAM_END-__HEAP_SIZE)
-000047 bfed      	OUT  SPL,R30
-000048 e0e2      	LDI  R30,HIGH(__SRAM_END-__HEAP_SIZE)
-000049 bfee      	OUT  SPH,R30
+000042 e5ef      	LDI  R30,LOW(__SRAM_END-__HEAP_SIZE)
+000043 bfed      	OUT  SPL,R30
+000044 e0e2      	LDI  R30,HIGH(__SRAM_END-__HEAP_SIZE)
+000045 bfee      	OUT  SPH,R30
                  
                  ;DATA STACK POINTER INITIALIZATION
-00004a eec0      	LDI  R28,LOW(__SRAM_START+__DSTACK_SIZE)
-00004b e0d0      	LDI  R29,HIGH(__SRAM_START+__DSTACK_SIZE)
+000046 eec0      	LDI  R28,LOW(__SRAM_START+__DSTACK_SIZE)
+000047 e0d0      	LDI  R29,HIGH(__SRAM_START+__DSTACK_SIZE)
                  
-00004c c000      	RJMP _main
+000048 c000      	RJMP _main
                  
                  	.ESEG
                  	.ORG 0
@@ -1268,455 +1262,672 @@ B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1
                  ;#define pause PINB.5
                  ;#define reset PINB.6
                  ;
-                 ;bit up_a;
-                 ;bit down_a;
-                 ;bit left_a;
-                 ;bit right_a;
-                 ;bit run_a;
-                 ;bit pause_a;
-                 ;bit reset_a;
+                 ;bit up_a, up_p;
+                 ;bit down_a, down_p;
+                 ;bit left_a, left_p;
+                 ;bit right_a, right_p;
+                 ;bit run_a, run_p;
+                 ;bit pause_a, pause_p;
+                 ;bit reset_a, reset_p;
+                 ;bit stop;
                  ;const char movements[5] =  {0x0A, 0x05, 0x02, 0x08, 0x00};
                  ;unsigned char travel[10];
-                 ;unsigned char input;
                  ;void check_up(void);
                  ;void check_down(void);
                  ;void check_left(void);
                  ;void check_right(void);
                  ;void check_run(void);
-                 ;unsigned int var1=0;
+                 ;void check_reset(void);
+                 ;void check_pause(void);
+                 ;unsigned int var1;
+                 ;unsigned int var2;
                  ;// Declare your global variables here
                  ;
                  ;void main(void)
-                 ; 0000 0035 {
+                 ; 0000 0038 {
                  
                  	.CSEG
                  _main:
                  ; .FSTART _main
-                 ; 0000 0036 // Declare your local variables here
-                 ; 0000 0037 
-                 ; 0000 0038 // Input/Output Ports initialization
-                 ; 0000 0039 // Port A initialization
-                 ; 0000 003A // Function: Bit7=Out Bit6=Out Bit5=Out Bit4=Out Bit3=Out Bit2=Out Bit1=Out Bit0=Out
-                 ; 0000 003B DDRA=(1<<DDA7) | (1<<DDA6) | (1<<DDA5) | (1<<DDA4) | (1<<DDA3) | (1<<DDA2) | (1<<DDA1) | (1<<DDA0);
-00004d efef      	LDI  R30,LOW(255)
-00004e bbea      	OUT  0x1A,R30
-                 ; 0000 003C // State: Bit7=0 Bit6=0 Bit5=0 Bit4=0 Bit3=0 Bit2=0 Bit1=0 Bit0=0
-                 ; 0000 003D PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
-00004f e0e0      	LDI  R30,LOW(0)
-000050 bbeb      	OUT  0x1B,R30
-                 ; 0000 003E 
-                 ; 0000 003F // Port B initialization
-                 ; 0000 0040 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-                 ; 0000 0041 DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
-000051 bbe7      	OUT  0x17,R30
-                 ; 0000 0042 // State: Bit7=P Bit6=P Bit5=P Bit4=P Bit3=P Bit2=P Bit1=P Bit0=P
-                 ; 0000 0043 PORTB=(1<<PORTB7) | (1<<PORTB6) | (1<<PORTB5) | (1<<PORTB4) | (1<<PORTB3) | (1<<PORTB2) | (1<<PORTB1) | (1<<PORTB0);
-000052 efef      	LDI  R30,LOW(255)
-000053 bbe8      	OUT  0x18,R30
-                 ; 0000 0044 
-                 ; 0000 0045 // Port C initialization
-                 ; 0000 0046 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-                 ; 0000 0047 DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
-000054 e0e0      	LDI  R30,LOW(0)
-000055 bbe4      	OUT  0x14,R30
-                 ; 0000 0048 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-                 ; 0000 0049 PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
-000056 bbe5      	OUT  0x15,R30
-                 ; 0000 004A 
-                 ; 0000 004B // Port D initialization
-                 ; 0000 004C // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-                 ; 0000 004D DDRD=(0<<DDD7) | (0<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
-000057 bbe1      	OUT  0x11,R30
-                 ; 0000 004E // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-                 ; 0000 004F PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
-000058 bbe2      	OUT  0x12,R30
-                 ; 0000 0050 
-                 ; 0000 0051 // Timer/Counter 0 initialization
-                 ; 0000 0052 // Clock source: System Clock
-                 ; 0000 0053 // Clock value: Timer 0 Stopped
-                 ; 0000 0054 // Mode: Normal top=0xFF
-                 ; 0000 0055 // OC0 output: Disconnected
-                 ; 0000 0056 TCCR0=(0<<WGM00) | (0<<COM01) | (0<<COM00) | (0<<WGM01) | (0<<CS02) | (0<<CS01) | (0<<CS00);
-000059 bfe3      	OUT  0x33,R30
-                 ; 0000 0057 TCNT0=0x00;
-00005a bfe2      	OUT  0x32,R30
-                 ; 0000 0058 OCR0=0x00;
-00005b bfec      	OUT  0x3C,R30
-                 ; 0000 0059 
-                 ; 0000 005A // Timer/Counter 1 initialization
-                 ; 0000 005B // Clock source: System Clock
-                 ; 0000 005C // Clock value: Timer1 Stopped
-                 ; 0000 005D // Mode: Normal top=0xFFFF
-                 ; 0000 005E // OC1A output: Disconnected
-                 ; 0000 005F // OC1B output: Disconnected
-                 ; 0000 0060 // Noise Canceler: Off
-                 ; 0000 0061 // Input Capture on Falling Edge
-                 ; 0000 0062 // Timer1 Overflow Interrupt: Off
-                 ; 0000 0063 // Input Capture Interrupt: Off
-                 ; 0000 0064 // Compare A Match Interrupt: Off
-                 ; 0000 0065 // Compare B Match Interrupt: Off
-                 ; 0000 0066 TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
-00005c bdef      	OUT  0x2F,R30
-                 ; 0000 0067 TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
-00005d bdee      	OUT  0x2E,R30
-                 ; 0000 0068 TCNT1H=0x00;
-00005e bded      	OUT  0x2D,R30
-                 ; 0000 0069 TCNT1L=0x00;
-00005f bdec      	OUT  0x2C,R30
-                 ; 0000 006A ICR1H=0x00;
-000060 bde7      	OUT  0x27,R30
-                 ; 0000 006B ICR1L=0x00;
-000061 bde6      	OUT  0x26,R30
-                 ; 0000 006C OCR1AH=0x00;
-000062 bdeb      	OUT  0x2B,R30
-                 ; 0000 006D OCR1AL=0x00;
-000063 bdea      	OUT  0x2A,R30
-                 ; 0000 006E OCR1BH=0x00;
-000064 bde9      	OUT  0x29,R30
-                 ; 0000 006F OCR1BL=0x00;
-000065 bde8      	OUT  0x28,R30
-                 ; 0000 0070 
-                 ; 0000 0071 // Timer/Counter 2 initialization
-                 ; 0000 0072 // Clock source: System Clock
-                 ; 0000 0073 // Clock value: Timer2 Stopped
-                 ; 0000 0074 // Mode: Normal top=0xFF
-                 ; 0000 0075 // OC2 output: Disconnected
-                 ; 0000 0076 ASSR=0<<AS2;
-000066 bde2      	OUT  0x22,R30
-                 ; 0000 0077 TCCR2=(0<<WGM20) | (0<<COM21) | (0<<COM20) | (0<<WGM21) | (0<<CS22) | (0<<CS21) | (0<<CS20);
-000067 bde5      	OUT  0x25,R30
-                 ; 0000 0078 TCNT2=0x00;
-000068 bde4      	OUT  0x24,R30
-                 ; 0000 0079 OCR2=0x00;
-000069 bde3      	OUT  0x23,R30
-                 ; 0000 007A 
-                 ; 0000 007B // Timer(s)/Counter(s) Interrupt(s) initialization
-                 ; 0000 007C TIMSK=(0<<OCIE2) | (0<<TOIE2) | (0<<TICIE1) | (0<<OCIE1A) | (0<<OCIE1B) | (0<<TOIE1) | (0<<OCIE0) | (0<<TOIE0);
-00006a bfe9      	OUT  0x39,R30
+                 ; 0000 0039 // Declare your local variables here
+                 ; 0000 003A 
+                 ; 0000 003B // Input/Output Ports initialization
+                 ; 0000 003C // Port A initialization
+                 ; 0000 003D // Function: Bit7=Out Bit6=Out Bit5=Out Bit4=Out Bit3=Out Bit2=Out Bit1=Out Bit0=Out
+                 ; 0000 003E DDRA=(1<<DDA7) | (1<<DDA6) | (1<<DDA5) | (1<<DDA4) | (1<<DDA3) | (1<<DDA2) | (1<<DDA1) | (1<<DDA0);
+000049 efef      	LDI  R30,LOW(255)
+00004a bbea      	OUT  0x1A,R30
+                 ; 0000 003F // State: Bit7=0 Bit6=0 Bit5=0 Bit4=0 Bit3=0 Bit2=0 Bit1=0 Bit0=0
+                 ; 0000 0040 PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
+00004b e0e0      	LDI  R30,LOW(0)
+00004c bbeb      	OUT  0x1B,R30
+                 ; 0000 0041 
+                 ; 0000 0042 // Port B initialization
+                 ; 0000 0043 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+                 ; 0000 0044 DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
+00004d bbe7      	OUT  0x17,R30
+                 ; 0000 0045 // State: Bit7=P Bit6=P Bit5=P Bit4=P Bit3=P Bit2=P Bit1=P Bit0=P
+                 ; 0000 0046 PORTB=(1<<PORTB7) | (1<<PORTB6) | (1<<PORTB5) | (1<<PORTB4) | (1<<PORTB3) | (1<<PORTB2) | (1<<PORTB1) | (1<<PORTB0);
+00004e efef      	LDI  R30,LOW(255)
+00004f bbe8      	OUT  0x18,R30
+                 ; 0000 0047 
+                 ; 0000 0048 // Port C initialization
+                 ; 0000 0049 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+                 ; 0000 004A DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
+000050 e0e0      	LDI  R30,LOW(0)
+000051 bbe4      	OUT  0x14,R30
+                 ; 0000 004B // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+                 ; 0000 004C PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
+000052 bbe5      	OUT  0x15,R30
+                 ; 0000 004D 
+                 ; 0000 004E // Port D initialization
+                 ; 0000 004F // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+                 ; 0000 0050 DDRD=(0<<DDD7) | (0<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
+000053 bbe1      	OUT  0x11,R30
+                 ; 0000 0051 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+                 ; 0000 0052 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
+000054 bbe2      	OUT  0x12,R30
+                 ; 0000 0053 
+                 ; 0000 0054 // Timer/Counter 0 initialization
+                 ; 0000 0055 // Clock source: System Clock
+                 ; 0000 0056 // Clock value: Timer 0 Stopped
+                 ; 0000 0057 // Mode: Normal top=0xFF
+                 ; 0000 0058 // OC0 output: Disconnected
+                 ; 0000 0059 TCCR0=(0<<WGM00) | (0<<COM01) | (0<<COM00) | (0<<WGM01) | (0<<CS02) | (0<<CS01) | (0<<CS00);
+000055 bfe3      	OUT  0x33,R30
+                 ; 0000 005A TCNT0=0x00;
+000056 bfe2      	OUT  0x32,R30
+                 ; 0000 005B OCR0=0x00;
+000057 bfec      	OUT  0x3C,R30
+                 ; 0000 005C 
+                 ; 0000 005D // Timer/Counter 1 initialization
+                 ; 0000 005E // Clock source: System Clock
+                 ; 0000 005F // Clock value: Timer1 Stopped
+                 ; 0000 0060 // Mode: Normal top=0xFFFF
+                 ; 0000 0061 // OC1A output: Disconnected
+                 ; 0000 0062 // OC1B output: Disconnected
+                 ; 0000 0063 // Noise Canceler: Off
+                 ; 0000 0064 // Input Capture on Falling Edge
+                 ; 0000 0065 // Timer1 Overflow Interrupt: Off
+                 ; 0000 0066 // Input Capture Interrupt: Off
+                 ; 0000 0067 // Compare A Match Interrupt: Off
+                 ; 0000 0068 // Compare B Match Interrupt: Off
+                 ; 0000 0069 TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
+000058 bdef      	OUT  0x2F,R30
+                 ; 0000 006A TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
+000059 bdee      	OUT  0x2E,R30
+                 ; 0000 006B TCNT1H=0x00;
+00005a bded      	OUT  0x2D,R30
+                 ; 0000 006C TCNT1L=0x00;
+00005b bdec      	OUT  0x2C,R30
+                 ; 0000 006D ICR1H=0x00;
+00005c bde7      	OUT  0x27,R30
+                 ; 0000 006E ICR1L=0x00;
+00005d bde6      	OUT  0x26,R30
+                 ; 0000 006F OCR1AH=0x00;
+00005e bdeb      	OUT  0x2B,R30
+                 ; 0000 0070 OCR1AL=0x00;
+00005f bdea      	OUT  0x2A,R30
+                 ; 0000 0071 OCR1BH=0x00;
+000060 bde9      	OUT  0x29,R30
+                 ; 0000 0072 OCR1BL=0x00;
+000061 bde8      	OUT  0x28,R30
+                 ; 0000 0073 
+                 ; 0000 0074 // Timer/Counter 2 initialization
+                 ; 0000 0075 // Clock source: System Clock
+                 ; 0000 0076 // Clock value: Timer2 Stopped
+                 ; 0000 0077 // Mode: Normal top=0xFF
+                 ; 0000 0078 // OC2 output: Disconnected
+                 ; 0000 0079 ASSR=0<<AS2;
+000062 bde2      	OUT  0x22,R30
+                 ; 0000 007A TCCR2=(0<<WGM20) | (0<<COM21) | (0<<COM20) | (0<<WGM21) | (0<<CS22) | (0<<CS21) | (0<<CS20);
+000063 bde5      	OUT  0x25,R30
+                 ; 0000 007B TCNT2=0x00;
+000064 bde4      	OUT  0x24,R30
+                 ; 0000 007C OCR2=0x00;
+000065 bde3      	OUT  0x23,R30
                  ; 0000 007D 
-                 ; 0000 007E // External Interrupt(s) initialization
-                 ; 0000 007F // INT0: Off
-                 ; 0000 0080 // INT1: Off
-                 ; 0000 0081 // INT2: Off
-                 ; 0000 0082 MCUCR=(0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
-00006b bfe5      	OUT  0x35,R30
-                 ; 0000 0083 MCUCSR=(0<<ISC2);
-00006c bfe4      	OUT  0x34,R30
-                 ; 0000 0084 
-                 ; 0000 0085 // USART initialization
-                 ; 0000 0086 // USART disabled
-                 ; 0000 0087 UCSRB=(0<<RXCIE) | (0<<TXCIE) | (0<<UDRIE) | (0<<RXEN) | (0<<TXEN) | (0<<UCSZ2) | (0<<RXB8) | (0<<TXB8);
-00006d b9ea      	OUT  0xA,R30
-                 ; 0000 0088 
-                 ; 0000 0089 // Analog Comparator initialization
-                 ; 0000 008A // Analog Comparator: Off
-                 ; 0000 008B // The Analog Comparator's positive input is
-                 ; 0000 008C // connected to the AIN0 pin
-                 ; 0000 008D // The Analog Comparator's negative input is
-                 ; 0000 008E // connected to the AIN1 pin
-                 ; 0000 008F ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
-00006e e8e0      	LDI  R30,LOW(128)
-00006f b9e8      	OUT  0x8,R30
-                 ; 0000 0090 SFIOR=(0<<ACME);
-000070 e0e0      	LDI  R30,LOW(0)
-000071 bfe0      	OUT  0x30,R30
-                 ; 0000 0091 
-                 ; 0000 0092 // ADC initialization
-                 ; 0000 0093 // ADC disabled
-                 ; 0000 0094 ADCSRA=(0<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (0<<ADPS1) | (0<<ADPS0);
-000072 b9e6      	OUT  0x6,R30
-                 ; 0000 0095 
-                 ; 0000 0096 // SPI initialization
-                 ; 0000 0097 // SPI disabled
-                 ; 0000 0098 SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
-000073 b9ed      	OUT  0xD,R30
-                 ; 0000 0099 
-                 ; 0000 009A // TWI initialization
-                 ; 0000 009B // TWI disabled
-                 ; 0000 009C TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
-000074 bfe6      	OUT  0x36,R30
-                 ; 0000 009D 
-                 ; 0000 009E while (1){
+                 ; 0000 007E // Timer(s)/Counter(s) Interrupt(s) initialization
+                 ; 0000 007F TIMSK=(0<<OCIE2) | (0<<TOIE2) | (0<<TICIE1) | (0<<OCIE1A) | (0<<OCIE1B) | (0<<TOIE1) | (0<<OCIE0) | (0<<TOIE0);
+000066 bfe9      	OUT  0x39,R30
+                 ; 0000 0080 
+                 ; 0000 0081 // External Interrupt(s) initialization
+                 ; 0000 0082 // INT0: Off
+                 ; 0000 0083 // INT1: Off
+                 ; 0000 0084 // INT2: Off
+                 ; 0000 0085 MCUCR=(0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+000067 bfe5      	OUT  0x35,R30
+                 ; 0000 0086 MCUCSR=(0<<ISC2);
+000068 bfe4      	OUT  0x34,R30
+                 ; 0000 0087 
+                 ; 0000 0088 // USART initialization
+                 ; 0000 0089 // USART disabled
+                 ; 0000 008A UCSRB=(0<<RXCIE) | (0<<TXCIE) | (0<<UDRIE) | (0<<RXEN) | (0<<TXEN) | (0<<UCSZ2) | (0<<RXB8) | (0<<TXB8);
+000069 b9ea      	OUT  0xA,R30
+                 ; 0000 008B 
+                 ; 0000 008C // Analog Comparator initialization
+                 ; 0000 008D // Analog Comparator: Off
+                 ; 0000 008E // The Analog Comparator's positive input is
+                 ; 0000 008F // connected to the AIN0 pin
+                 ; 0000 0090 // The Analog Comparator's negative input is
+                 ; 0000 0091 // connected to the AIN1 pin
+                 ; 0000 0092 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
+00006a e8e0      	LDI  R30,LOW(128)
+00006b b9e8      	OUT  0x8,R30
+                 ; 0000 0093 SFIOR=(0<<ACME);
+00006c e0e0      	LDI  R30,LOW(0)
+00006d bfe0      	OUT  0x30,R30
+                 ; 0000 0094 
+                 ; 0000 0095 // ADC initialization
+                 ; 0000 0096 // ADC disabled
+                 ; 0000 0097 ADCSRA=(0<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (0<<ADPS1) | (0<<ADPS0);
+00006e b9e6      	OUT  0x6,R30
+                 ; 0000 0098 
+                 ; 0000 0099 // SPI initialization
+                 ; 0000 009A // SPI disabled
+                 ; 0000 009B SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
+00006f b9ed      	OUT  0xD,R30
+                 ; 0000 009C 
+                 ; 0000 009D // TWI initialization
+                 ; 0000 009E // TWI disabled
+                 ; 0000 009F TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
+000070 bfe6      	OUT  0x36,R30
+                 ; 0000 00A0 
+                 ; 0000 00A1 
+                 ; 0000 00A2 var1 = 0;
+000071 2444      	CLR  R4
+000072 2455      	CLR  R5
+                 ; 0000 00A3 var2 = 0;
+000073 2466      	CLR  R6
+000074 2477      	CLR  R7
+                 ; 0000 00A4 stop = 1;
+000075 9468      	SET
+000076 f836      	BLD  R3,6
+                 ; 0000 00A5 while (1){
                  _0x3:
-                 ; 0000 009F     input = PORTB&0x7f;
-000075 b3e8      	IN   R30,0x18
-000076 77ef      	ANDI R30,0x7F
-000077 2e5e      	MOV  R5,R30
-                 ; 0000 00A0     check_up();
-000078 d006      	RCALL _check_up
-                 ; 0000 00A1     check_down();
-000079 d015      	RCALL _check_down
-                 ; 0000 00A2     check_left();
-00007a d024      	RCALL _check_left
-                 ; 0000 00A3     check_right();
-00007b d033      	RCALL _check_right
-                 ; 0000 00A4     check_run();
-00007c d042      	RCALL _check_run
-                 ; 0000 00A5       }
-00007d cff7      	RJMP _0x3
-                 ; 0000 00A6 }
+                 ; 0000 00A6     check_up();
+000077 d008      	RCALL _check_up
+                 ; 0000 00A7     check_down();
+000078 d020      	RCALL _check_down
+                 ; 0000 00A8     check_left();
+000079 d038      	RCALL _check_left
+                 ; 0000 00A9     check_right();
+00007a d050      	RCALL _check_right
+                 ; 0000 00AA     check_run();
+00007b d068      	RCALL _check_run
+                 ; 0000 00AB     check_reset();
+00007c d09d      	RCALL _check_reset
+                 ; 0000 00AC     check_pause();
+00007d d0b3      	RCALL _check_pause
+                 ; 0000 00AD }
+00007e cff8      	RJMP _0x3
+                 ; 0000 00AE 
+                 ; 0000 00AF 
+                 ; 0000 00B0 
+                 ; 0000 00B1 
+                 ; 0000 00B2 
+                 ; 0000 00B3 
+                 ; 0000 00B4 }
                  _0x6:
-00007e cfff      	RJMP _0x6
+00007f cfff      	RJMP _0x6
                  ; .FEND
                  ;
                  ;
+                 ;
+                 ;
                  ;void check_up(void){
-                 ; 0000 00A9 void check_up(void){
+                 ; 0000 00B9 void check_up(void){
                  _check_up:
                  ; .FSTART _check_up
-                 ; 0000 00AA     if(var1<10){
-00007f d069      	RCALL SUBOPT_0x0
-000080 f468      	BRSH _0x7
-                 ; 0000 00AB         if (up==0)
-000081 99b0      	SBIC 0x16,0
-000082 c002      	RJMP _0x8
-                 ; 0000 00AC           up_a=0;
-000083 94e8      	CLT
-000084 c001      	RJMP _0x23
-                 ; 0000 00AD         else
+                 ; 0000 00BA     if(var1<10){
+000080 d0ce      	RCALL SUBOPT_0x0
+000081 f4b0      	BRSH _0x7
+                 ; 0000 00BB     if (up==0)
+000082 99b0      	SBIC 0x16,0
+000083 c002      	RJMP _0x8
+                 ; 0000 00BC         up_a=0;
+000084 94e8      	CLT
+000085 c001      	RJMP _0x4F
+                 ; 0000 00BD     else
                  _0x8:
-                 ; 0000 00AE           up_a=1;
-000085 9468      	SET
-                 _0x23:
-000086 f820      	BLD  R2,0
-                 ; 0000 00AF         if (up_a==0){ //hubo cambio de flanco de 1 a
-000087 fc20      	SBRC R2,0
-000088 c003      	RJMP _0xA
-                 ; 0000 00B0             travel[var1] = 0;
-000089 d064      	RCALL SUBOPT_0x1
-00008a e0e0      	LDI  R30,LOW(0)
-00008b d067      	RCALL SUBOPT_0x2
-                 ; 0000 00B1             var1++;
-                 ; 0000 00B2           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-                 ; 0000 00B3         }
-                 ; 0000 00B4         if (up_a==1) //hubo cambio de flanco de 0 a 1
+                 ; 0000 00BE         up_a=1;
+000086 9468      	SET
+                 _0x4F:
+000087 f820      	BLD  R2,0
+                 ; 0000 00BF     if ((up_p==1)&&(up_a==0)){ //hubo cambio de flanco de 1 a 0
+000088 fe21      	SBRS R2,1
+000089 c002      	RJMP _0xB
+00008a fe20      	SBRS R2,0
+00008b c001      	RJMP _0xC
+                 _0xB:
+00008c c003      	RJMP _0xA
+                 _0xC:
+                 ; 0000 00C0         travel[var1] = 0;
+00008d d0c6      	RCALL SUBOPT_0x1
+00008e e0e0      	LDI  R30,LOW(0)
+00008f d0c9      	RCALL SUBOPT_0x2
+                 ; 0000 00C1         var1++;
+                 ; 0000 00C2         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+                 ; 0000 00C3     }
+                 ; 0000 00C4     if ((up_p==0)&&(up_a==1)) //hubo cambio de flanco de 0 a 1
                  _0xA:
-00008c fc20      	SBRC R2,0
-                 ; 0000 00B5           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-00008d d06c      	RCALL SUBOPT_0x3
-                 ; 0000 00B6 
-                 ; 0000 00B7     }
-                 ; 0000 00B8 
-                 ; 0000 00B9 }
+000090 fc21      	SBRC R2,1
+000091 c002      	RJMP _0xE
+000092 fc20      	SBRC R2,0
+000093 c001      	RJMP _0xF
+                 _0xE:
+000094 c001      	RJMP _0xD
+                 _0xF:
+                 ; 0000 00C5     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+000095 d0ca      	RCALL SUBOPT_0x3
+                 ; 0000 00C6     up_p=up_a;
+                 _0xD:
+000096 fa20      	BST  R2,0
+000097 f821      	BLD  R2,1
+                 ; 0000 00C7     }
+                 ; 0000 00C8 
+                 ; 0000 00C9 }
                  _0x7:
-00008e 9508      	RET
+000098 9508      	RET
                  ; .FEND
                  ;
                  ;
                  ;
                  ;void check_down(void){
-                 ; 0000 00BD void check_down(void){
+                 ; 0000 00CD void check_down(void){
                  _check_down:
                  ; .FSTART _check_down
-                 ; 0000 00BE     if(var1<10){
-00008f d059      	RCALL SUBOPT_0x0
-000090 f468      	BRSH _0xC
-                 ; 0000 00BF         if (down==0)
-000091 99b1      	SBIC 0x16,1
-000092 c002      	RJMP _0xD
-                 ; 0000 00C0           down_a=0;
-000093 94e8      	CLT
-000094 c001      	RJMP _0x24
-                 ; 0000 00C1         else
-                 _0xD:
-                 ; 0000 00C2           down_a=1;
-000095 9468      	SET
-                 _0x24:
-000096 f821      	BLD  R2,1
-                 ; 0000 00C3         if (down_a==0){ //hubo cambio de flanco de 1 a
-000097 fc21      	SBRC R2,1
-000098 c003      	RJMP _0xF
-                 ; 0000 00C4             travel[var1] = 1;
-000099 d054      	RCALL SUBOPT_0x1
-00009a e0e1      	LDI  R30,LOW(1)
-00009b d057      	RCALL SUBOPT_0x2
-                 ; 0000 00C5             var1++;
-                 ; 0000 00C6           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-                 ; 0000 00C7         }
-                 ; 0000 00C8         if (down_a==1) //hubo cambio de flanco de 0 a 1
-                 _0xF:
-00009c fc21      	SBRC R2,1
-                 ; 0000 00C9           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-00009d d05c      	RCALL SUBOPT_0x3
-                 ; 0000 00CA 
-                 ; 0000 00CB     }
-                 ; 0000 00CC 
-                 ; 0000 00CD }
-                 _0xC:
-00009e 9508      	RET
+                 ; 0000 00CE     if(var1<10){
+000099 d0b5      	RCALL SUBOPT_0x0
+00009a f4b0      	BRSH _0x10
+                 ; 0000 00CF     if (down==0)
+00009b 99b1      	SBIC 0x16,1
+00009c c002      	RJMP _0x11
+                 ; 0000 00D0         down_a=0;
+00009d 94e8      	CLT
+00009e c001      	RJMP _0x50
+                 ; 0000 00D1     else
+                 _0x11:
+                 ; 0000 00D2         down_a=1;
+00009f 9468      	SET
+                 _0x50:
+0000a0 f822      	BLD  R2,2
+                 ; 0000 00D3     if ((down_p==1)&&(down_a==0)){ //hubo cambio de flanco de 1 a 0
+0000a1 fe23      	SBRS R2,3
+0000a2 c002      	RJMP _0x14
+0000a3 fe22      	SBRS R2,2
+0000a4 c001      	RJMP _0x15
+                 _0x14:
+0000a5 c003      	RJMP _0x13
+                 _0x15:
+                 ; 0000 00D4         travel[var1] = 1;
+0000a6 d0ad      	RCALL SUBOPT_0x1
+0000a7 e0e1      	LDI  R30,LOW(1)
+0000a8 d0b0      	RCALL SUBOPT_0x2
+                 ; 0000 00D5         var1++;
+                 ; 0000 00D6         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+                 ; 0000 00D7     }
+                 ; 0000 00D8     if ((down_p==0)&&(down_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x13:
+0000a9 fc23      	SBRC R2,3
+0000aa c002      	RJMP _0x17
+0000ab fc22      	SBRC R2,2
+0000ac c001      	RJMP _0x18
+                 _0x17:
+0000ad c001      	RJMP _0x16
+                 _0x18:
+                 ; 0000 00D9     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+0000ae d0b1      	RCALL SUBOPT_0x3
+                 ; 0000 00DA     down_p=down_a;
+                 _0x16:
+0000af fa22      	BST  R2,2
+0000b0 f823      	BLD  R2,3
+                 ; 0000 00DB     }
+                 ; 0000 00DC 
+                 ; 0000 00DD }
+                 _0x10:
+0000b1 9508      	RET
                  ; .FEND
                  ;
                  ;
                  ;
                  ;void check_left(void){
-                 ; 0000 00D1 void check_left(void){
+                 ; 0000 00E1 void check_left(void){
                  _check_left:
                  ; .FSTART _check_left
-                 ; 0000 00D2     if(var1<10){
-00009f d049      	RCALL SUBOPT_0x0
-0000a0 f468      	BRSH _0x11
-                 ; 0000 00D3         if (left==0)
-0000a1 99b2      	SBIC 0x16,2
-0000a2 c002      	RJMP _0x12
-                 ; 0000 00D4           left_a=0;
-0000a3 94e8      	CLT
-0000a4 c001      	RJMP _0x25
-                 ; 0000 00D5         else
-                 _0x12:
-                 ; 0000 00D6           left_a=1;
-0000a5 9468      	SET
-                 _0x25:
-0000a6 f822      	BLD  R2,2
-                 ; 0000 00D7         if (left_a==0){ //hubo cambio de flanco de 1 a
-0000a7 fc22      	SBRC R2,2
-0000a8 c003      	RJMP _0x14
-                 ; 0000 00D8             travel[var1] = 2;
-0000a9 d044      	RCALL SUBOPT_0x1
-0000aa e0e2      	LDI  R30,LOW(2)
-0000ab d047      	RCALL SUBOPT_0x2
-                 ; 0000 00D9             var1++;
-                 ; 0000 00DA           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-                 ; 0000 00DB         }
-                 ; 0000 00DC         if (left_a==1) //hubo cambio de flanco de 0 a 1
-                 _0x14:
-0000ac fc22      	SBRC R2,2
-                 ; 0000 00DD           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-0000ad d04c      	RCALL SUBOPT_0x3
-                 ; 0000 00DE 
-                 ; 0000 00DF     }
-                 ; 0000 00E0 
-                 ; 0000 00E1 }
-                 _0x11:
-0000ae 9508      	RET
+                 ; 0000 00E2     if(var1<10){
+0000b2 d09c      	RCALL SUBOPT_0x0
+0000b3 f4b0      	BRSH _0x19
+                 ; 0000 00E3     if (left==0)
+0000b4 99b2      	SBIC 0x16,2
+0000b5 c002      	RJMP _0x1A
+                 ; 0000 00E4         left_a=0;
+0000b6 94e8      	CLT
+0000b7 c001      	RJMP _0x51
+                 ; 0000 00E5     else
+                 _0x1A:
+                 ; 0000 00E6         left_a=1;
+0000b8 9468      	SET
+                 _0x51:
+0000b9 f824      	BLD  R2,4
+                 ; 0000 00E7     if ((left_p==1)&&(left_a==0)){ //hubo cambio de flanco de 1 a 0
+0000ba fe25      	SBRS R2,5
+0000bb c002      	RJMP _0x1D
+0000bc fe24      	SBRS R2,4
+0000bd c001      	RJMP _0x1E
+                 _0x1D:
+0000be c003      	RJMP _0x1C
+                 _0x1E:
+                 ; 0000 00E8         travel[var1] = 2;
+0000bf d094      	RCALL SUBOPT_0x1
+0000c0 e0e2      	LDI  R30,LOW(2)
+0000c1 d097      	RCALL SUBOPT_0x2
+                 ; 0000 00E9         var1++;
+                 ; 0000 00EA         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+                 ; 0000 00EB     }
+                 ; 0000 00EC     if ((left_p==0)&&(left_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x1C:
+0000c2 fc25      	SBRC R2,5
+0000c3 c002      	RJMP _0x20
+0000c4 fc24      	SBRC R2,4
+0000c5 c001      	RJMP _0x21
+                 _0x20:
+0000c6 c001      	RJMP _0x1F
+                 _0x21:
+                 ; 0000 00ED     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+0000c7 d098      	RCALL SUBOPT_0x3
+                 ; 0000 00EE     left_p=left_a;
+                 _0x1F:
+0000c8 fa24      	BST  R2,4
+0000c9 f825      	BLD  R2,5
+                 ; 0000 00EF     }
+                 ; 0000 00F0 
+                 ; 0000 00F1 }
+                 _0x19:
+0000ca 9508      	RET
                  ; .FEND
                  ;
                  ;
                  ;
                  ;void check_right(void){
-                 ; 0000 00E5 void check_right(void){
+                 ; 0000 00F5 void check_right(void){
                  _check_right:
                  ; .FSTART _check_right
-                 ; 0000 00E6     if(var1<10){
-0000af d039      	RCALL SUBOPT_0x0
-0000b0 f468      	BRSH _0x16
-                 ; 0000 00E7         if (right==0)
-0000b1 99b3      	SBIC 0x16,3
-0000b2 c002      	RJMP _0x17
-                 ; 0000 00E8           right_a=0;
-0000b3 94e8      	CLT
-0000b4 c001      	RJMP _0x26
-                 ; 0000 00E9         else
-                 _0x17:
-                 ; 0000 00EA           right_a=1;
-0000b5 9468      	SET
+                 ; 0000 00F6     if(var1<10){
+0000cb d083      	RCALL SUBOPT_0x0
+0000cc f4b0      	BRSH _0x22
+                 ; 0000 00F7     if (right==0)
+0000cd 99b3      	SBIC 0x16,3
+0000ce c002      	RJMP _0x23
+                 ; 0000 00F8         right_a=0;
+0000cf 94e8      	CLT
+0000d0 c001      	RJMP _0x52
+                 ; 0000 00F9     else
+                 _0x23:
+                 ; 0000 00FA         right_a=1;
+0000d1 9468      	SET
+                 _0x52:
+0000d2 f826      	BLD  R2,6
+                 ; 0000 00FB     if ((right_p==1)&&(right_a==0)){ //hubo cambio de flanco de 1 a 0
+0000d3 fe27      	SBRS R2,7
+0000d4 c002      	RJMP _0x26
+0000d5 fe26      	SBRS R2,6
+0000d6 c001      	RJMP _0x27
                  _0x26:
-0000b6 f823      	BLD  R2,3
-                 ; 0000 00EB         if (right_a==0){ //hubo cambio de flanco de 1 a
-0000b7 fc23      	SBRC R2,3
-0000b8 c003      	RJMP _0x19
-                 ; 0000 00EC             travel[var1] = 3;
-0000b9 d034      	RCALL SUBOPT_0x1
-0000ba e0e3      	LDI  R30,LOW(3)
-0000bb d037      	RCALL SUBOPT_0x2
-                 ; 0000 00ED             var1++;
-                 ; 0000 00EE           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-                 ; 0000 00EF         }
-                 ; 0000 00F0         if (right_a==1) //hubo cambio de flanco de 0 a 1
-                 _0x19:
-0000bc fc23      	SBRC R2,3
-                 ; 0000 00F1           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-0000bd d03c      	RCALL SUBOPT_0x3
-                 ; 0000 00F2 
-                 ; 0000 00F3     }
-                 ; 0000 00F4 
-                 ; 0000 00F5 }
-                 _0x16:
-0000be 9508      	RET
+0000d7 c003      	RJMP _0x25
+                 _0x27:
+                 ; 0000 00FC         travel[var1] = 3;
+0000d8 d07b      	RCALL SUBOPT_0x1
+0000d9 e0e3      	LDI  R30,LOW(3)
+0000da d07e      	RCALL SUBOPT_0x2
+                 ; 0000 00FD         var1++;
+                 ; 0000 00FE         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+                 ; 0000 00FF     }
+                 ; 0000 0100     if ((right_p==0)&&(right_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x25:
+0000db fc27      	SBRC R2,7
+0000dc c002      	RJMP _0x29
+0000dd fc26      	SBRC R2,6
+0000de c001      	RJMP _0x2A
+                 _0x29:
+0000df c001      	RJMP _0x28
+                 _0x2A:
+                 ; 0000 0101     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+0000e0 d07f      	RCALL SUBOPT_0x3
+                 ; 0000 0102     right_p=right_a;
+                 _0x28:
+0000e1 fa26      	BST  R2,6
+0000e2 f827      	BLD  R2,7
+                 ; 0000 0103     }
+                 ; 0000 0104 
+                 ; 0000 0105 }
+                 _0x22:
+0000e3 9508      	RET
                  ; .FEND
-                 ;
                  ;
                  ;
                  ;
                  ;void check_run(void){
-                 ; 0000 00FA void check_run(void){
+                 ; 0000 0109 void check_run(void){
                  _check_run:
                  ; .FSTART _check_run
-                 ; 0000 00FB     if(var1>=9){
-0000bf e0e9      	LDI  R30,LOW(9)
-0000c0 e0f0      	LDI  R31,HIGH(9)
-0000c1 166e      	CP   R6,R30
-0000c2 067f      	CPC  R7,R31
-0000c3 f120      	BRLO _0x1B
-                 ; 0000 00FC         if (run==0)
-0000c4 99b4      	SBIC 0x16,4
-0000c5 c002      	RJMP _0x1C
-                 ; 0000 00FD           run_a=0;
-0000c6 94e8      	CLT
-0000c7 c001      	RJMP _0x27
-                 ; 0000 00FE         else
-                 _0x1C:
-                 ; 0000 00FF           run_a=1;
-0000c8 9468      	SET
-                 _0x27:
-0000c9 f824      	BLD  R2,4
-                 ; 0000 0100         if (run_a==0){ //hubo cambio de flanco de 1 a
-0000ca fc24      	SBRC R2,4
-0000cb c01a      	RJMP _0x1E
-                 ; 0000 0101             var1 = 0;
-0000cc 2466      	CLR  R6
-0000cd 2477      	CLR  R7
-                 ; 0000 0102             while(var1!=10){
-                 _0x1F:
-0000ce e0ea      	LDI  R30,LOW(10)
-0000cf e0f0      	LDI  R31,HIGH(10)
-0000d0 15e6      	CP   R30,R6
-0000d1 05f7      	CPC  R31,R7
-0000d2 f071      	BREQ _0x21
-                 ; 0000 0103                 PORTA = movements[travel[var1]];
-0000d3 d01a      	RCALL SUBOPT_0x1
-0000d4 91ec      	LD   R30,X
-0000d5 e0f0      	LDI  R31,0
-0000d6 5de6      	SUBI R30,LOW(-_movements*2)
-0000d7 4fff      	SBCI R31,HIGH(-_movements*2)
-0000d8 9004      	LPM  R0,Z
-0000d9 ba0b      	OUT  0x1B,R0
-                 ; 0000 0104                 var1++;
-0000da 01f3      	MOVW R30,R6
-0000db 9631      	ADIW R30,1
-0000dc 013f      	MOVW R6,R30
-                 ; 0000 0105                 delay_ms(1000);
-0000dd eea8      	LDI  R26,LOW(1000)
-0000de e0b3      	LDI  R27,HIGH(1000)
-0000df d01d      	RCALL _delay_ms
-                 ; 0000 0106             }
-0000e0 cfed      	RJMP _0x1F
-                 _0x21:
-                 ; 0000 0107 
-                 ; 0000 0108 
-                 ; 0000 0109             PORTA = movements[4];
-                +
-0000e1 e2ee     +LDI R30 , LOW ( 2 * _movements + ( 4 ) )
-0000e2 e0f0     +LDI R31 , HIGH ( 2 * _movements + ( 4 ) )
-                 	__POINTW1FN _movements,4
-0000e3 9004      	LPM  R0,Z
-0000e4 ba0b      	OUT  0x1B,R0
-                 ; 0000 010A 
-                 ; 0000 010B 
-                 ; 0000 010C           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-0000e5 d014      	RCALL SUBOPT_0x3
-                 ; 0000 010D         }
-                 ; 0000 010E         if (run_a==1) //hubo cambio de flanco de 0 a 1
-                 _0x1E:
-0000e6 fc24      	SBRC R2,4
-                 ; 0000 010F           delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-0000e7 d012      	RCALL SUBOPT_0x3
-                 ; 0000 0110 
-                 ; 0000 0111     }
-                 ; 0000 0112 
-                 ; 0000 0113 }
-                 _0x1B:
-0000e8 9508      	RET
+                 ; 0000 010A     if(var1>=9){
+0000e4 e0e9      	LDI  R30,LOW(9)
+0000e5 e0f0      	LDI  R31,HIGH(9)
+0000e6 164e      	CP   R4,R30
+0000e7 065f      	CPC  R5,R31
+0000e8 f180      	BRLO _0x2B
+                 ; 0000 010B         if (run==0)
+0000e9 99b4      	SBIC 0x16,4
+0000ea c002      	RJMP _0x2C
+                 ; 0000 010C             run_a=0;
+0000eb 94e8      	CLT
+0000ec c001      	RJMP _0x53
+                 ; 0000 010D         else
+                 _0x2C:
+                 ; 0000 010E             run_a=1;
+0000ed 9468      	SET
+                 _0x53:
+0000ee f830      	BLD  R3,0
+                 ; 0000 010F         if ((run_p==1)&&(run_a==0)){ //hubo cambio de flanco de 1 a 0
+0000ef fe31      	SBRS R3,1
+0000f0 c002      	RJMP _0x2F
+0000f1 fe30      	SBRS R3,0
+0000f2 c001      	RJMP _0x30
+                 _0x2F:
+0000f3 c01d      	RJMP _0x2E
+                 _0x30:
+                 ; 0000 0110             while (var2!=10){
+                 _0x31:
+0000f4 e0ea      	LDI  R30,LOW(10)
+0000f5 e0f0      	LDI  R31,HIGH(10)
+0000f6 15e6      	CP   R30,R6
+0000f7 05f7      	CPC  R31,R7
+0000f8 f0b1      	BREQ _0x33
+                 ; 0000 0111                 check_pause();
+0000f9 d037      	RCALL _check_pause
+                 ; 0000 0112                 if(stop){
+0000fa fe36      	SBRS R3,6
+0000fb c011      	RJMP _0x34
+                 ; 0000 0113                     PORTA = movements[travel[var2]];
+0000fc eea0      	LDI  R26,LOW(_travel)
+0000fd e0b0      	LDI  R27,HIGH(_travel)
+0000fe 0da6      	ADD  R26,R6
+0000ff 1db7      	ADC  R27,R7
+000100 91ec      	LD   R30,X
+000101 e0f0      	LDI  R31,0
+000102 5de6      	SUBI R30,LOW(-_movements*2)
+000103 4fff      	SBCI R31,HIGH(-_movements*2)
+000104 9004      	LPM  R0,Z
+000105 ba0b      	OUT  0x1B,R0
+                 ; 0000 0114                     var2++;
+000106 01f3      	MOVW R30,R6
+000107 9631      	ADIW R30,1
+000108 013f      	MOVW R6,R30
+                 ; 0000 0115                     delay_ms(1000);
+000109 eea8      	LDI  R26,LOW(1000)
+00010a e0b3      	LDI  R27,HIGH(1000)
+00010b d05c      	RCALL _delay_ms
+                 ; 0000 0116                 }
+                 ; 0000 0117 
+                 ; 0000 0118                 else
+00010c c001      	RJMP _0x35
+                 _0x34:
+                 ; 0000 0119                     PORTA = movements[4];
+00010d d055      	RCALL SUBOPT_0x4
+                 ; 0000 011A             }
+                 _0x35:
+00010e cfe5      	RJMP _0x31
+                 _0x33:
+                 ; 0000 011B 
+                 ; 0000 011C             PORTA = movements[4];
+00010f d053      	RCALL SUBOPT_0x4
+                 ; 0000 011D             delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+000110 d04f      	RCALL SUBOPT_0x3
+                 ; 0000 011E         }
+                 ; 0000 011F         if ((run_p==0)&&(run_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x2E:
+000111 fc31      	SBRC R3,1
+000112 c002      	RJMP _0x37
+000113 fc30      	SBRC R3,0
+000114 c001      	RJMP _0x38
+                 _0x37:
+000115 c001      	RJMP _0x36
+                 _0x38:
+                 ; 0000 0120         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+000116 d049      	RCALL SUBOPT_0x3
+                 ; 0000 0121         run_p=run_a;
+                 _0x36:
+000117 fa30      	BST  R3,0
+000118 f831      	BLD  R3,1
+                 ; 0000 0122     }
+                 ; 0000 0123 }
+                 _0x2B:
+000119 9508      	RET
                  ; .FEND
+                 ;
+                 ;
+                 ;
+                 ;void check_reset(void){
+                 ; 0000 0127 void check_reset(void){
+                 _check_reset:
+                 ; .FSTART _check_reset
+                 ; 0000 0128     if (reset==0)
+00011a 99b6      	SBIC 0x16,6
+00011b c002      	RJMP _0x39
+                 ; 0000 0129         reset_a=0;
+00011c 94e8      	CLT
+00011d c001      	RJMP _0x54
+                 ; 0000 012A     else
+                 _0x39:
+                 ; 0000 012B         reset_a=1;
+00011e 9468      	SET
+                 _0x54:
+00011f f834      	BLD  R3,4
+                 ; 0000 012C     if ((reset_p==1)&&(reset_a==0)){ //hubo cambio de flanco de 1 a 0
+000120 fe35      	SBRS R3,5
+000121 c002      	RJMP _0x3C
+000122 fe34      	SBRS R3,4
+000123 c001      	RJMP _0x3D
+                 _0x3C:
+000124 c003      	RJMP _0x3B
+                 _0x3D:
+                 ; 0000 012D         var1 = 0;
+000125 2444      	CLR  R4
+000126 2455      	CLR  R5
+                 ; 0000 012E         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+000127 d038      	RCALL SUBOPT_0x3
+                 ; 0000 012F     }
+                 ; 0000 0130     if ((reset_p==0)&&(reset_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x3B:
+000128 fc35      	SBRC R3,5
+000129 c002      	RJMP _0x3F
+00012a fc34      	SBRC R3,4
+00012b c001      	RJMP _0x40
+                 _0x3F:
+00012c c001      	RJMP _0x3E
+                 _0x40:
+                 ; 0000 0131     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+00012d d032      	RCALL SUBOPT_0x3
+                 ; 0000 0132     reset_p=reset_a;
+                 _0x3E:
+00012e fa34      	BST  R3,4
+00012f f835      	BLD  R3,5
+                 ; 0000 0133 }
+000130 9508      	RET
+                 ; .FEND
+                 ;
+                 ;
+                 ;
+                 ;void check_pause(void){
+                 ; 0000 0137 void check_pause(void){
+                 _check_pause:
+                 ; .FSTART _check_pause
+                 ; 0000 0138     if (pause==0)
+000131 99b5      	SBIC 0x16,5
+000132 c002      	RJMP _0x41
+                 ; 0000 0139         pause_a=0;
+000133 94e8      	CLT
+000134 c001      	RJMP _0x55
+                 ; 0000 013A     else
+                 _0x41:
+                 ; 0000 013B         pause_a=1;
+000135 9468      	SET
+                 _0x55:
+000136 f832      	BLD  R3,2
+                 ; 0000 013C     if ((pause_p==1)&&(pause_a==0)) //hubo cambio de flanco de 1 a 0
+000137 fe33      	SBRS R3,3
+000138 c002      	RJMP _0x44
+000139 fe32      	SBRS R3,2
+00013a c001      	RJMP _0x45
+                 _0x44:
+00013b c00a      	RJMP _0x43
+                 _0x45:
+                 ; 0000 013D     {
+                 ; 0000 013E     if(stop){
+00013c fe36      	SBRS R3,6
+00013d c004      	RJMP _0x46
+                 ; 0000 013F         stop = 0;
+00013e 94e8      	CLT
+00013f f836      	BLD  R3,6
+                 ; 0000 0140         PORTA.4 = 1;
+000140 9adc      	SBI  0x1B,4
+                 ; 0000 0141     }
+                 ; 0000 0142 
+                 ; 0000 0143     else{
+000141 c003      	RJMP _0x49
+                 _0x46:
+                 ; 0000 0144 
+                 ; 0000 0145             stop = 1;
+000142 9468      	SET
+000143 f836      	BLD  R3,6
+                 ; 0000 0146         PORTA.4 = 0;}
+000144 98dc      	CBI  0x1B,4
+                 _0x49:
+                 ; 0000 0147 
+                 ; 0000 0148     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+000145 d01a      	RCALL SUBOPT_0x3
+                 ; 0000 0149     }
+                 ; 0000 014A     if ((pause_p==0)&&(pause_a==1)) //hubo cambio de flanco de 0 a 1
+                 _0x43:
+000146 fc33      	SBRC R3,3
+000147 c002      	RJMP _0x4D
+000148 fc32      	SBRC R3,2
+000149 c001      	RJMP _0x4E
+                 _0x4D:
+00014a c001      	RJMP _0x4C
+                 _0x4E:
+                 ; 0000 014B     delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+00014b d014      	RCALL SUBOPT_0x3
+                 ; 0000 014C     pause_p=pause_a;
+                 _0x4C:
+00014c fa32      	BST  R3,2
+00014d f833      	BLD  R3,3
+                 ; 0000 014D }
+00014e 9508      	RET
+                 ; .FEND
+                 ;
+                 ;
                  
                  	.DSEG
                  _travel:
@@ -1725,54 +1936,64 @@ B:\Code\Introduccion-microcontroladores\Proyecto_02\Debug\List\proyecto_02.asm(1
                  	.CSEG
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:7 WORDS
                  SUBOPT_0x0:
-0000e9 e0ea      	LDI  R30,LOW(10)
-0000ea e0f0      	LDI  R31,HIGH(10)
-0000eb 166e      	CP   R6,R30
-0000ec 067f      	CPC  R7,R31
-0000ed 9508      	RET
+00014f e0ea      	LDI  R30,LOW(10)
+000150 e0f0      	LDI  R31,HIGH(10)
+000151 164e      	CP   R4,R30
+000152 065f      	CPC  R5,R31
+000153 9508      	RET
                  
-                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:10 WORDS
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:7 WORDS
                  SUBOPT_0x1:
-0000ee eea0      	LDI  R26,LOW(_travel)
-0000ef e0b0      	LDI  R27,HIGH(_travel)
-0000f0 0da6      	ADD  R26,R6
-0000f1 1db7      	ADC  R27,R7
-0000f2 9508      	RET
+000154 eea0      	LDI  R26,LOW(_travel)
+000155 e0b0      	LDI  R27,HIGH(_travel)
+000156 0da4      	ADD  R26,R4
+000157 1db5      	ADC  R27,R5
+000158 9508      	RET
                  
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:16 WORDS
                  SUBOPT_0x2:
-0000f3 93ec      	ST   X,R30
-0000f4 01f3      	MOVW R30,R6
-0000f5 9631      	ADIW R30,1
-0000f6 013f      	MOVW R6,R30
-0000f7 e2a8      	LDI  R26,LOW(40)
-0000f8 e0b0      	LDI  R27,0
-0000f9 c003      	RJMP _delay_ms
+000159 93ec      	ST   X,R30
+00015a 01f2      	MOVW R30,R4
+00015b 9631      	ADIW R30,1
+00015c 012f      	MOVW R4,R30
+00015d e2a8      	LDI  R26,LOW(40)
+00015e e0b0      	LDI  R27,0
+00015f c008      	RJMP _delay_ms
                  
-                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:8 WORDS
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 10 TIMES, CODE SIZE REDUCTION:16 WORDS
                  SUBOPT_0x3:
-0000fa e2a8      	LDI  R26,LOW(40)
-0000fb e0b0      	LDI  R27,0
-0000fc c000      	RJMP _delay_ms
+000160 e2a8      	LDI  R26,LOW(40)
+000161 e0b0      	LDI  R27,0
+000162 c005      	RJMP _delay_ms
+                 
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+                 SUBOPT_0x4:
+                +
+000163 e2ee     +LDI R30 , LOW ( 2 * _movements + ( 4 ) )
+000164 e0f0     +LDI R31 , HIGH ( 2 * _movements + ( 4 ) )
+                 	__POINTW1FN _movements,4
+000165 9004      	LPM  R0,Z
+000166 ba0b      	OUT  0x1B,R0
+000167 9508      	RET
                  
                  
                  	.CSEG
                  _delay_ms:
-0000fd 9610      	adiw r26,0
-0000fe f039      	breq __delay_ms1
+000168 9610      	adiw r26,0
+000169 f039      	breq __delay_ms1
                  __delay_ms0:
                 +
-0000ff ef8a     +LDI R24 , LOW ( 0xFA )
-000100 e090     +LDI R25 , HIGH ( 0xFA )
+00016a ef8a     +LDI R24 , LOW ( 0xFA )
+00016b e090     +LDI R25 , HIGH ( 0xFA )
                 +__DELAY_USW_LOOP :
-000101 9701     +SBIW R24 , 1
-000102 f7f1     +BRNE __DELAY_USW_LOOP
+00016c 9701     +SBIW R24 , 1
+00016d f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 0xFA
-000103 95a8      	wdr
-000104 9711      	sbiw r26,1
-000105 f7c9      	brne __delay_ms0
+00016e 95a8      	wdr
+00016f 9711      	sbiw r26,1
+000170 f7c9      	brne __delay_ms0
                  __delay_ms1:
-000106 9508      	ret
+000171 9508      	ret
                  
                  ;END OF CODE MARKER
                  __END_OF_CODE:
@@ -1793,41 +2014,41 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 ATmega8535 register use summary:
-r0 :   8 r1 :   1 r2 :  15 r3 :   0 r4 :   0 r5 :   1 r6 :   9 r7 :   5 
+r0 :   8 r1 :   1 r2 :  28 r3 :  26 r4 :   7 r5 :   5 r6 :   5 r7 :   3 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
 r16:   0 r17:   0 r18:   0 r19:   0 r20:   0 r21:   0 r22:   2 r23:   0 
-r24:   9 r25:   3 r26:  10 r27:   7 r28:   1 r29:   1 r30:  77 r31:  12 
+r24:   9 r25:   3 r26:  12 r27:   9 r28:   1 r29:   1 r30:  74 r31:  12 
 x  :   5 y  :   0 z  :   9 
-Registers used: 17 out of 35 (48.6%)
+Registers used: 19 out of 35 (54.3%)
 
 ATmega8535 instruction use summary:
-.lds  :   0 .lds.l:   0 .sts  :   0 .sts.l:   0 adc   :   1 add   :   1 
-adiw  :   3 and   :   0 andi  :   1 asr   :   0 bclr  :   0 bld   :   5 
+.lds  :   0 .lds.l:   0 .sts  :   0 .sts.l:   0 adc   :   2 add   :   2 
+adiw  :   3 and   :   0 andi  :   0 asr   :   0 bclr  :   0 bld   :  17 
 brbc  :   0 brbs  :   0 brcc  :   0 brcs  :   0 break :   0 breq  :   3 
 brge  :   0 brhc  :   0 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 
 brlt  :   0 brmi  :   0 brne  :   5 brpl  :   0 brsh  :   4 brtc  :   0 
-brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   0 cbi   :   0 
-cbr   :   0 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   4 
-cls   :   0 clt   :   5 clv   :   0 clz   :   0 com   :   0 cp    :   3 
+brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   7 cbi   :   1 
+cbr   :   0 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   8 
+cls   :   0 clt   :   8 clv   :   0 clz   :   0 com   :   0 cp    :   3 
 cpc   :   3 cpi   :   0 cpse  :   0 dec   :   1 des   :   0 eor   :   0 
-fmul  :   0 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 
-inc   :   0 ld    :   1 ldd   :   0 ldi   :  41 lds   :   0 lpm   :  11 
-lsl   :   0 lsr   :   0 mov   :   1 movw  :   7 mul   :   0 muls  :   0 
+fmul  :   0 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 
+inc   :   0 ld    :   1 ldd   :   0 ldi   :  43 lds   :   0 lpm   :  11 
+lsl   :   0 lsr   :   0 mov   :   0 movw  :   7 mul   :   0 muls  :   0 
 mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  42 
-pop   :   0 push  :   0 rcall :  25 ret   :   8 reti  :   0 rjmp  :  43 
-rol   :   0 ror   :   0 sbc   :   0 sbci  :   1 sbi   :   0 sbic  :   5 
-sbis  :   0 sbiw  :   5 sbr   :   0 sbrc  :  10 sbrs  :   0 sec   :   0 
-seh   :   0 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   5 
+pop   :   0 push  :   0 rcall :  33 ret   :  11 reti  :   0 rjmp  :  88 
+rol   :   0 ror   :   0 sbc   :   0 sbci  :   1 sbi   :   1 sbic  :   7 
+sbis  :   0 sbiw  :   5 sbr   :   0 sbrc  :  14 sbrs  :  16 sec   :   0 
+seh   :   0 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   9 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   4 std   :   0 
 sts   :   0 sub   :   0 subi  :   1 swap  :   0 tst   :   0 wdr   :   1 
 
-Instructions used: 33 out of 114 (28.9%)
+Instructions used: 34 out of 114 (29.8%)
 
 ATmega8535 memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00020e    502     24    526    8192   6.4%
+[.cseg] 0x000000 0x0002e4    724     16    740    8192   9.0%
 [.dseg] 0x000060 0x0000ea      0     10     10     512   2.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 
-Assembly complete, 0 errors, 4 warnings
+Assembly complete, 0 errors, 5 warnings

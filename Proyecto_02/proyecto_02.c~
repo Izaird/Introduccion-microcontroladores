@@ -31,22 +31,25 @@ Data Stack size         : 128
 #define pause PINB.5
 #define reset PINB.6
 
-bit up_a;
-bit down_a;
-bit left_a;
-bit right_a;
-bit run_a;
-bit pause_a;
-bit reset_a;
+bit up_a, up_p;
+bit down_a, down_p;
+bit left_a, left_p;
+bit right_a, right_p;
+bit run_a, run_p;
+bit pause_a, pause_p;
+bit reset_a, reset_p;
+bit stop;
 const char movements[5] =  {0x0A, 0x05, 0x02, 0x08, 0x00};
 unsigned char travel[10];
-unsigned char input;
 void check_up(void);
 void check_down(void);
 void check_left(void);
 void check_right(void);
 void check_run(void);
-unsigned int var1=0;
+void check_reset(void);
+void check_pause(void); 
+unsigned int var1;
+unsigned int var2;
 // Declare your global variables here
 
 void main(void)
@@ -155,31 +158,43 @@ SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<
 // TWI disabled
 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 
+
+var1 = 0;
+var2 = 0;
+stop = 1;
 while (1){
-    input = PORTB&0x7f;
     check_up();
     check_down();
     check_left();
     check_right();
     check_run();
-      }
+    check_reset();
 }
 
 
+
+
+
+     
+}
+
+
+
+
 void check_up(void){
-    if(var1<10){
-        if (up==0)
-          up_a=0;
-        else
-          up_a=1;
-        if (up_a==0){ //hubo cambio de flanco de 1 a
-            travel[var1] = 0;
-            var1++;
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-        }
-        if (up_a==1) //hubo cambio de flanco de 0 a 1
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-    
+    if(var1<10){ 
+    if (up==0)
+        up_a=0;
+    else
+        up_a=1;
+    if ((up_p==1)&&(up_a==0)){ //hubo cambio de flanco de 1 a 0
+        travel[var1] = 0;
+        var1++;
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((up_p==0)&&(up_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    up_p=up_a;
     }
 
 }
@@ -188,18 +203,18 @@ void check_up(void){
 
 void check_down(void){
     if(var1<10){
-        if (down==0)
-          down_a=0;
-        else
-          down_a=1;
-        if (down_a==0){ //hubo cambio de flanco de 1 a
-            travel[var1] = 1;
-            var1++;
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-        }
-        if (down_a==1) //hubo cambio de flanco de 0 a 1
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-    
+    if (down==0)
+        down_a=0;
+    else
+        down_a=1;
+    if ((down_p==1)&&(down_a==0)){ //hubo cambio de flanco de 1 a 0
+        travel[var1] = 1;
+        var1++;
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((down_p==0)&&(down_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    down_p=down_a;
     }
 
 }
@@ -208,18 +223,18 @@ void check_down(void){
 
 void check_left(void){
     if(var1<10){
-        if (left==0)
-          left_a=0;
-        else
-          left_a=1;
-        if (left_a==0){ //hubo cambio de flanco de 1 a
-            travel[var1] = 2;
-            var1++;
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-        }
-        if (left_a==1) //hubo cambio de flanco de 0 a 1
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-    
+    if (left==0)
+        left_a=0;
+    else
+        left_a=1;
+    if ((left_p==1)&&(left_a==0)){ //hubo cambio de flanco de 1 a 0
+        travel[var1] = 2;
+        var1++;
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((left_p==0)&&(left_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    left_p=left_a;
     }
 
 }
@@ -228,48 +243,92 @@ void check_left(void){
 
 void check_right(void){
     if(var1<10){
-        if (right==0)
-          right_a=0;
-        else
-          right_a=1;
-        if (right_a==0){ //hubo cambio de flanco de 1 a
-            travel[var1] = 3;
-            var1++;
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-        }
-        if (right_a==1) //hubo cambio de flanco de 0 a 1
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-    
+    if (right==0)
+        right_a=0;
+    else
+        right_a=1;
+    if ((right_p==1)&&(right_a==0)){ //hubo cambio de flanco de 1 a 0
+        travel[var1] = 3;
+        var1++;
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((right_p==0)&&(right_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    right_p=right_a;
     }
 
 }
-
 
 
 
 void check_run(void){
     if(var1>=9){
         if (run==0)
-          run_a=0;
+            run_a=0;
         else
-          run_a=1;
-        if (run_a==0){ //hubo cambio de flanco de 1 a
-            var1 = 0;
-            while(var1!=10){
-                PORTA = movements[travel[var1]];
-                var1++;
-                delay_ms(1000);           
+            run_a=1;
+        if ((run_p==1)&&(run_a==0)){ //hubo cambio de flanco de 1 a 0
+            while (var2!=10){
+                check_pause();
+                if(stop){
+                    PORTA = movements[travel[var2]];
+                    var2++;
+                    delay_ms(1000); 
+                }
+                
+                else
+                    PORTA = movements[4];   
             }
-            
 
             PORTA = movements[4];
-            
-
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+            delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
         }
-        if (run_a==1) //hubo cambio de flanco de 0 a 1
-          delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
-    
+        if ((run_p==0)&&(run_a==1)) //hubo cambio de flanco de 0 a 1
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+        run_p=run_a;
     }
-
 }
+
+
+
+void check_reset(void){
+    if (reset==0)
+        reset_a=0;
+    else
+        reset_a=1;
+    if ((reset_p==1)&&(reset_a==0)){ //hubo cambio de flanco de 1 a 0
+        var1 = 0;
+        delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((reset_p==0)&&(reset_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    reset_p=reset_a;
+}
+
+
+
+void check_pause(void){
+    if (pause==0)
+        pause_a=0;
+    else
+        pause_a=1;
+    if ((pause_p==1)&&(pause_a==0)) //hubo cambio de flanco de 1 a 0
+    {
+    if(stop){ 
+        stop = 0;
+        PORTA.4 = 1;
+    }
+    
+    else{
+    
+            stop = 1;
+        PORTA.4 = 0;}
+    
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    }
+    if ((pause_p==0)&&(pause_a==1)) //hubo cambio de flanco de 0 a 1
+    delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+    pause_p=pause_a;
+}
+
+

@@ -23,8 +23,8 @@ Data Stack size         : 128
 #include <mega8535.h>
 #include <delay.h>
 #define boton PIND.0
-bit botonp;
-bit botona;
+bit boton_p;
+bit boton_a;
 unsigned char var;
 const char tabla7segmentos [10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7c,0x07,0x7f,0x6f};
 // Declare your global variables here
@@ -138,20 +138,20 @@ TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 while (1)
       { 
         if (boton==0)
-        botona=0;
+        boton_a=0;
         else
-        botona=1;
-        if ((botonp==1)&&(botona==0)) //hubo cambio de flanco de 1 a 0
+        boton_a=1;
+        if ((boton_p==1)&&(boton_a==0)) //hubo cambio de flanco de 1 a 0
         {
         var++; //Se incrementa la variable
         if (var==10)
         var=0;
         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
         }
-        if ((botonp==0)&&(botona==1)) //hubo cambio de flanco de 0 a 1
+        if ((boton_p==0)&&(boton_a==1)) //hubo cambio de flanco de 0 a 1
         delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
         PORTB=tabla7segmentos [var];
-        botonp=botona;
+        boton_p=boton_a;
       // Place your code here
 
       }

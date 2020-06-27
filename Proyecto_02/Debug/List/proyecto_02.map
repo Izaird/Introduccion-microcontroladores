@@ -1,0 +1,31 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+travel                                                                            0x00E0      10
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+up_a                                                                              R2.0      1bit
+down_a                                                                            R2.1      1bit
+left_a                                                                            R2.2      1bit
+right_a                                                                           R2.3      1bit
+run_a                                                                             R2.4      1bit
+pause_a                                                                           R2.5      1bit
+reset_a                                                                           R2.6      1bit
+input                                                                             R5           1
+var1                                                                              R6,R7        2
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+main                                                                              0x0004D     50
+check_up                                                                          0x0007F     16
+check_down                                                                        0x0008F     16
+check_left                                                                        0x0009F     16
+check_right                                                                       0x000AF     16
+check_run                                                                         0x000BF     42

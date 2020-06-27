@@ -1,18 +1,18 @@
 /*******************************************************
-This program was created by the CodeWizardAVR V3.39a 
+This program was created by the CodeWizardAVR V3.32 
 Automatic Program Generator
-© Copyright 1998-2020 Pavel Haiduc, HP InfoTech s.r.l.
-http://www.hpinfotech.ro
+© Copyright 1998-2017 Pavel Haiduc, HP InfoTech s.r.l.
+http://www.hpinfotech.com
 
 Project : 
 Version : 
-Date    : 24/02/2020
+Date    : 2/15/2020
 Author  : 
 Company : 
 Comments: 
 
 
-Chip type               : ATmega8535
+Chip type               : ATmega8535L
 Program type            : Application
 AVR Core Clock frequency: 1.000000 MHz
 Memory model            : Small
@@ -22,14 +22,15 @@ Data Stack size         : 128
 
 #include <mega8535.h>
 #include <delay.h>
-#define up PINB.0
-#define down PINB.1
-#define left PINB.2
-#define right PINB.3
-bit up_a;
-bit down_a;
-bit left_a;
-bit right_a;
+#define boton PIND.0
+bit botonp;
+bit botona;
+unsigned int var1;
+unsigned int var2;
+unsigned char units;
+unsigned int teens;//teens
+unsigned int count;
+const char tabla7segmentos [10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7c,0x07,0x7f,0x6f};
 
 // Declare your global variables here
 
@@ -45,10 +46,10 @@ DDRA=(1<<DDA7) | (1<<DDA6) | (1<<DDA5) | (1<<DDA4) | (1<<DDA3) | (1<<DDA2) | (1<
 PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
 
 // Port B initialization
-// Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
-DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
-// State: Bit7=P Bit6=P Bit5=P Bit4=P Bit3=P Bit2=P Bit1=P Bit0=P 
-PORTB=(1<<PORTB7) | (1<<PORTB6) | (1<<PORTB5) | (1<<PORTB4) | (1<<PORTB3) | (1<<PORTB2) | (1<<PORTB1) | (1<<PORTB0);
+// Function: Bit7=Out Bit6=Out Bit5=Out Bit4=Out Bit3=Out Bit2=Out Bit1=Out Bit0=Out 
+DDRB=(1<<DDB7) | (1<<DDB6) | (1<<DDB5) | (1<<DDB4) | (1<<DDB3) | (1<<DDB2) | (1<<DDB1) | (1<<DDB0);
+// State: Bit7=0 Bit6=0 Bit5=0 Bit4=0 Bit3=0 Bit2=0 Bit1=0 Bit0=0 
+PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
 
 // Port C initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
@@ -122,7 +123,7 @@ UCSRB=(0<<RXCIE) | (0<<TXCIE) | (0<<UDRIE) | (0<<RXEN) | (0<<TXEN) | (0<<UCSZ2) 
 // Analog Comparator: Off
 // The Analog Comparator's positive input is
 // connected to the AIN0 pin
-// The Analog Comparator's negat ive input is
+// The Analog Comparator's negative input is
 // connected to the AIN1 pin
 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
 SFIOR=(0<<ACME);
@@ -139,64 +140,56 @@ SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<
 // TWI disabled
 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 
-while (1)
-      { 
+while (1){
+    count = 2000;
+    while(count){
+        if (boton==1)
+            botona=1;
+        else
+            botona=0;
+        if ((botonp==0)&&(botona==1)){ //hubo cambio de flanco de 1 a 0
+            var1+=9; //Se incrementa la variable
+            delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+        }
+        if ((botonp==1 )&&(botona== 0)) //hubo cambio de flanco de 0 a 1
+            delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes   
+        botonp=botona;    
+    
+    count--;
+    }
+    if(var1>=85 && var1<=100){
+        PORTB.0 = 1;
+        PORTB.1 = 0;
+        PORTB.2 = 1;
+        PORTB.3 = 0;
+    }
+    else if(var1>=60 && var1<=80){
+        PORTB.0 = 0;
+        PORTB.1 = 1;
+        PORTB.2 = 0;
+        PORTB.3 = 1;
+    }
+    else if(var1>=30 && var1<=50){
+        PORTB.0 = 0;
+        PORTB.1 = 0;
+        PORTB.2 = 1;
+        PORTB.3 = 0;
+    }
+    
+    else if(var1>=1 && var1<=20){
+        PORTB.0 = 1;
+        PORTB.1 = 0;
+        PORTB.2 = 0;
+        PORTB.3 = 0;
+    }
+    else{
+        PORTB.0 = 0;
+        PORTB.1 = 0;
+        PORTB.2 = 0;
+        PORTB.4 = 0;
+    }
+    
+    var1 =0;
 
-        //Boton up        
-            if (up==0)
-              up_a=0;
-            else
-              up_a=1;
-            if (up_a==0){ //hubo cambio de flanco de 1 a
-                PORTA.0 = 1; 
-                delay_ms(5);
-                PORTA.0 = 0;
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
-            }
-            if (up_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
-              
-        //Boton down        
-            if (down==0)
-              down_a=0;
-            else
-              down_a=1;
-            if (down_a==0){ //hubo cambio de flanco de 1 a
-                PORTA.0 = 1; 
-                delay_ms(7);
-                PORTA.0 = 0;
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
-            }
-            if (down_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes          
-                  
-        //Boton left        
-            if (left==0)
-              left_a=0;
-            else
-              left_a=1;
-            if (left_a==0){ //hubo cambio de flanco de 1 a
-                PORTA.0 = 1; 
-                delay_ms(10);
-                PORTA.0 = 0;
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
-            }
-            if (left_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes   
-                         
-        //Boton right        
-            if (right==0)
-              right_a=0;
-            else
-              right_a=1;
-            if (right_a==0){ //hubo cambio de flanco de 1 a
-                PORTA.0 = 1; 
-                delay_ms(40);
-                PORTA.0 = 0;
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
-            }
-            if (right_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes          
-   
-       }
+}
 }

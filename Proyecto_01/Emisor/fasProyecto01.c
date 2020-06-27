@@ -122,7 +122,7 @@ UCSRB=(0<<RXCIE) | (0<<TXCIE) | (0<<UDRIE) | (0<<RXEN) | (0<<TXEN) | (0<<UCSZ2) 
 // Analog Comparator: Off
 // The Analog Comparator's positive input is
 // connected to the AIN0 pin
-// The Analog Comparator's negative input is
+// The Analog Comparator's negat ive input is
 // connected to the AIN1 pin
 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
 SFIOR=(0<<ACME);
@@ -149,12 +149,12 @@ while (1)
               up_a=1;
             if (up_a==0){ //hubo cambio de flanco de 1 a
                 PORTA.0 = 1; 
-                delay_ms(50);
+                delay_ms(5);
                 PORTA.0 = 0;
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
             }
             if (up_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
               
         //Boton down        
             if (down==0)
@@ -163,12 +163,12 @@ while (1)
               down_a=1;
             if (down_a==0){ //hubo cambio de flanco de 1 a
                 PORTA.0 = 1; 
-                delay_ms(100);
+                delay_ms(7);
                 PORTA.0 = 0;
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
             }
             if (down_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes          
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes          
                   
         //Boton left        
             if (left==0)
@@ -177,12 +177,12 @@ while (1)
               left_a=1;
             if (left_a==0){ //hubo cambio de flanco de 1 a
                 PORTA.0 = 1; 
-                delay_ms(150);
+                delay_ms(11);
                 PORTA.0 = 0;
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
             }
             if (left_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes   
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes   
                          
         //Boton right        
             if (right==0)
@@ -191,12 +191,12 @@ while (1)
               right_a=1;
             if (right_a==0){ //hubo cambio de flanco de 1 a
                 PORTA.0 = 1; 
-                delay_ms(200);
+                delay_ms(40);
                 PORTA.0 = 0;
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes
             }
             if (right_a==1) //hubo cambio de flanco de 0 a 1
-              delay_ms(40); //Se coloca retardo de 40mS para eliminar rebotes          
+              delay_ms(20); //Se coloca retardo de 40mS para eliminar rebotes          
    
        }
 }

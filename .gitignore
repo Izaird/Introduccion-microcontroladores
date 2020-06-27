@@ -3,3 +3,6 @@ Practica_[0-9]*/Relase/*
 Practica_[0-9]*/*.cof
 Proyecto_01/*/Relase/*
 Proyecto_01/*/Debug/*
+Proyecto_02/Debug/*
+Proyecto_02/Relase/*
+Proyecto_02/*.pdsbak
